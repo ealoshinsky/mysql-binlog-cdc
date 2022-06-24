@@ -3,6 +3,8 @@ services:
   mysqlmaster:
     platform: linux/amd64
     image: mysql:8.0.29
+    ports:
+      - "3336:3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
     volumes:
@@ -11,11 +13,15 @@ services:
   mysqlslave:
     platform: linux/amd64
     image: mysql:8.0.29
+    ports:
+      - "3337:3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
     volumes:
       - ./data/mysql-slave:/var/lib/mysql/
       - ./config/mysql-slave:/etc/mysql/conf.d/
+    depends_on:
+      - mysqlmaster
   mysqlconfigure:
     platform: linux/amd64
     image: mysql:8.0.29
